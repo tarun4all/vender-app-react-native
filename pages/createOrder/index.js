@@ -1,6 +1,9 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { StyleSheet } from "react-native";
+
 import FormWrapper from "../../components/Form";
+import useCreateOrder from "./useCreateOrder";
+import OverlayLoader from "../../components/OverlayLoader";
 
 const inputs = [
   {
@@ -20,16 +23,25 @@ const inputs = [
     id: "description",
   },
   {
-    placeholder: "Quantity",
-    id: "quantity",
-  },
-  {
     placeholder: "Approx Order Value",
     id: "approxOrderValue",
   },
 ];
 
 export default function CreateOrder({ navigation }) {
+  const { createOrder, loading, data, error } = useCreateOrder();
+
+  console.log({ loading, data, error });
+  console.log("error explained >> ", JSON.stringify(error, null, 2));
+  useEffect(() => {
+    if (data) {
+      alert("Order Created succesfully.");
+      navigation.navigate("Dashboard");
+    }
+  }, [data]);
+
+  if (loading) return <OverlayLoader />;
+
   return (
     <>
       <FormWrapper
@@ -40,11 +52,11 @@ export default function CreateOrder({ navigation }) {
           category: "",
           subCategory: "",
           description: "",
-          quantity: "",
           approxOrderValue: "",
         }}
         onSubmit={(values) => {
           console.log("blah blah >> ", values);
+          createOrder({ variables: { ...values, quantity: 10 } });
         }}
       />
     </>

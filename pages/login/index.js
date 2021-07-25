@@ -27,7 +27,7 @@ export default function Login({ navigation }) {
   useEffect(() => {
     if (data?.token) {
       setItem("auth", data?.token).then(() => {
-        navigation.navigate("Order");
+        navigation.navigate("Dashboard");
       });
     }
   }, [data]);
